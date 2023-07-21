@@ -1,17 +1,29 @@
 import express from "express";
 import morgan from "morgan";
 const app = express();
+import mongoose from "mongoose";
 
 import productRoutes from "./api/routes/products.js";
 import orderRoutes from "./api/routes/order.js";
+
+mongoose.connect(
+  "mongodb+srv://root:" +
+    process.env.MONGO_ATLAS_PW +
+    "@cluster0.iw3wajn.mongodb.net/?retryWrites=true&w=majority",
+
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 app.use(express.json()); //Parse JSON data in the req. body
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header(
+   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-WIth ,Content-Type, Accept, Authorization"
   );
@@ -19,7 +31,7 @@ app.use((req, res, next) => {
     res.header("Access-COntrol-Allow-Methods", "PUT, POST ,PATCH ,DELETE ,GET");
     return res.status(200).json({});
   }
-});
+}); */
 
 //Routes handling request
 app.use("/products", productRoutes);
